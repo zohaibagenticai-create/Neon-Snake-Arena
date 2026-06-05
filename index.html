@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Neon Snake Arena - a premium cyberpunk web-based Snake game with maps, power-ups, challenges, leaderboard, and offline PWA support." />
+  <meta name="theme-color" content="#050816" />
+  <title>Neon Snake Arena</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="loadingScreen" class="loading-screen" aria-label="Loading game">
+    <div class="loader-logo">S</div>
+    <p>Loading Neon Snake Arena...</p>
+  </div>
+
+  <div class="bg-grid"></div>
+  <div class="orb orb-one"></div>
+  <div class="orb orb-two"></div>
+
+  <header class="site-header glass">
+    <div class="brand" aria-label="Neon Snake Arena">
+      <span class="brand-logo">S</span>
+      <span>Neon Snake Arena</span>
+    </div>
+    <nav>
+      <button class="nav-btn" data-screen="landing">Home</button>
+      <button class="nav-btn" data-screen="game">Play</button>
+      <button class="nav-btn" data-screen="leaderboard">Leaderboard</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="landing" class="screen active">
+      <div class="hero glass">
+        <div>
+          <p class="eyebrow">Premium Cyberpunk Snake Game</p>
+          <h1>Survive the grid. Eat the energy. Beat your high score.</h1>
+          <p class="hero-text">
+            Play Classic, Maze, Infinite World, Arena, Daily Challenge, Survival,
+            Time Attack, and Boss Challenge modes with power-ups, particles, neon
+            effects, and offline support.
+          </p>
+          <div class="hero-actions">
+            <button id="startFromLanding" class="primary-btn">Start Game</button>
+            <button class="secondary-btn" data-screen="leaderboard">View Leaderboard</button>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="animated-snake-logo" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <p>Fast. Responsive. Installable.</p>
+        </div>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card glass"><h3>Multiple Maps</h3><p>Classic, Maze, Infinite World, and Arena layouts.</p></article>
+        <article class="feature-card glass"><h3>Power-ups</h3><p>Speed Boost, Slow Motion, Double Score, Shield, and Magnet Food.</p></article>
+        <article class="feature-card glass"><h3>Challenge Modes</h3><p>Boss, Daily, Survival, and Time Attack game modes.</p></article>
+      </div>
+    </section>
+
+    <section id="game" class="screen">
+      <div class="dashboard">
+        <aside class="panel glass">
+          <h2>Game Setup</h2>
+          <label>Player Nickname
+            <input id="nickname" type="text" maxlength="16" placeholder="Player" />
+          </label>
+          <label>Map
+            <select id="mapSelect">
+              <option value="classic">Classic</option>
+              <option value="maze">Maze</option>
+              <option value="infinite">Infinite World</option>
+              <option value="arena">Arena</option>
+            </select>
+          </label>
+          <label>Mode
+            <select id="modeSelect">
+              <option value="normal">Normal</option>
+              <option value="boss">Boss Challenge</option>
+              <option value="daily">Daily Challenge</option>
+              <option value="survival">Survival</option>
+              <option value="time">Time Attack</option>
+            </select>
+          </label>
+          <label>Difficulty
+            <select id="difficultySelect">
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+              <option value="expert">Expert</option>
+            </select>
+          </label>
+
+          <div class="button-grid">
+            <button id="startBtn" class="primary-btn">Start</button>
+            <button id="pauseBtn" class="secondary-btn">Pause</button>
+            <button id="restartBtn" class="secondary-btn">Restart</button>
+            <button id="installBtn" class="secondary-btn hidden">Install</button>
+          </div>
+
+          <div class="mobile-controls" aria-label="Touch controls">
+            <button data-dir="up">▲</button>
+            <div>
+              <button data-dir="left">◀</button>
+              <button data-dir="down">▼</button>
+              <button data-dir="right">▶</button>
+            </div>
+          </div>
+        </aside>
+
+        <section class="game-area glass">
+          <div class="stats-bar">
+            <span>Score: <strong id="score">0</strong></span>
+            <span>High: <strong id="highScore">0</strong></span>
+            <span>Time: <strong id="timer">0</strong>s</span>
+            <span>Power: <strong id="activePower">None</strong></span>
+          </div>
+          <canvas id="gameCanvas" width="640" height="640" aria-label="Snake game canvas"></canvas>
+          <div id="gameOverlay" class="game-overlay hidden">
+            <h2 id="overlayTitle">Game Over</h2>
+            <p id="overlayText">Press restart to play again.</p>
+            <button id="overlayRestart" class="primary-btn">Play Again</button>
+          </div>
+        </section>
+
+        <aside class="panel glass">
+          <h2>Power-ups</h2>
+          <ul class="power-list">
+            <li>⚡ Speed Boost</li>
+            <li>🐢 Slow Motion</li>
+            <li>✖ Double Score</li>
+            <li>🛡 Shield</li>
+            <li>🧲 Magnet Food</li>
+          </ul>
+          <h2>Achievements</h2>
+          <div id="achievements"></div>
+          <h2>Session</h2>
+          <p>Games: <strong id="gamesPlayed">0</strong></p>
+          <p>Average Score: <strong id="avgScore">0</strong></p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="leaderboard" class="screen">
+      <div class="glass leaderboard-box">
+        <h2>Local Leaderboard</h2>
+        <p class="muted">Online-ready data structure is included in JavaScript for future backend integration.</p>
+        <table>
+          <thead><tr><th>#</th><th>Player</th><th>Score</th><th>Mode</th><th>Map</th><th>Date</th></tr></thead>
+          <tbody id="leaderboardTable"></tbody>
+        </table>
+        <button id="clearLeaderboard" class="secondary-btn">Clear Leaderboard</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
